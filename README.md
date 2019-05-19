@@ -1,4 +1,4 @@
-# A Nuroevolution Experiment
+# A NeuroEvolution Experiment
 This is an experimentation project I've been working on to explore NeuroEvolution within the browser. Using
 NeuroEvolution, this application will learn to play a simple browser based game.
 

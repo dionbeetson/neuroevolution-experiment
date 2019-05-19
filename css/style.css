@@ -123,6 +123,9 @@ label {
   width: 96%;
 }
 
+select.level {
+  width: 100%;
+}
 canvas .trend {
   margin: 0px;
 }
