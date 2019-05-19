@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>NeuroEvolution Experiment</title>
+		<link href="css/light.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
+		<meta charset="UTF-8">
+	  <meta name="keywords" content="ML, NeuroEvolution, TensorFlowJS">
+	  <meta name="author" content="Dion Beetson">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+		<div class="round">
+			Generation <span id="round-current">0</span> of <span id="round-total">0</span>
+			<div id="round-progress" class="round-progress"></div>
+			<div id="generation-progress" class="generation-progress"></div>
+		</div>
+		<div class="layout">
+			<div class="menu">
+				<h2>Game</h2>
+				<select id="level">
+					<option value="1">Level 1</option>
+					<option value="2">Level 2</option>
+					<option value="3">Level 3</option>
+				</select>
+				<button id="btn-start" class="btn-speed">Play game</button>
+				<label for="enable-draw">
+					<input id="enable-draw" type="checkbox" />
+					Enable Drawing
+				</label>
+				<label for="btn-speed">
+					Speed
+					<br>
+					<input id="btn-speed" type="range" min="1" max="8" step="1" value="8"/>
+				</label>
+				<h2>Neural Network</h2>
+				<button id="btn-ml-it">Start Evolution</button>
+				<button id="btn-ml-save-top-brain">Save best</button>
+				<button id="btn-ml-load-top-brain-auto">Load best (auto)</button>
+				<button id="btn-ml-load-top-brain-manual">Load best (manual)</button>
+				<label for="ml-pause-before-next-generation">
+					<input id="ml-pause-before-next-generation" type="checkbox" />
+					Pause after generation
+				</label>
+			</div>
+			<div id="games-container" class="games-container"></div>
+			<div class="scores">
+				<h2>Evolution Trend</h2>
+				<div class="trend-container">
+					<canvas id="trend" class="trend"></canvas>
+				</div>
+
+				<h2>Best progress</h2>
+				<div id="best-player-score"></div>
+
+				<h2>Evolution History</h2>
+				<ol id="best-scores" class="best-scores" reversed></ol>
+			</div>
+		</div>
+
+		<script src ="lib/tf.js"></script>
+		<script src ="lib/chart.min.js"></script>
+		<script src ="js/util/utils.js"></script>
+		<script src ="js/game/Scorer.js"></script>
+		<script src ="js/game/Controller.js"></script>
+		<script src ="js/game/level/LevelBase.js"></script>
+		<script src ="js/game/level/LevelOne.js"></script>
+		<script src ="js/game/level/LevelTwo.js"></script>
+		<script src ="js/game/Player.js"></script>
+		<script src ="js/game/Game.js"></script>
+		<script src ="js/game/GameApi.js"></script>
+		<script src ="js/game/ui.js"></script>
+		<script src ="js/ai/NeuralNetwork.js"></script>
+		<script src ="js/ai/NeuroEvolution.js"></script>
+		<script src ="js/ai/NeuroEvolutionChart.js"></script>
+		<script src ="js/ai/Ai.js"></script>
+		<script src ="js/ai/ui.js"></script>
+	</body>
+</html>
