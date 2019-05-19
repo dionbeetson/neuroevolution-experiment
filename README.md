@@ -31,3 +31,5 @@ https://github.com/kognise/water.css
  - Implement Webpack to remove manual CSS/JS includes
  - Support for image recognition
  - Speed up implementation as it is a little laggy
+ - Remove global variables
+ 
