@@ -45,7 +45,8 @@ class Game {
     };
     this.#levels = {
       1: new LevelOne(),
-      2: new LevelTwo()
+      2: new LevelTwo(),
+      3: new LevelThree()
     };
   }
 
