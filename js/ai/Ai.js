@@ -1,5 +1,5 @@
 /**
- * Base AI class that essentially runs a single Evolution (Default of 9 games at once)
+ * AI class that essentially runs a single Evolution (Default of 9 games at once)
  */
  class Ai {
   #totalGames = 9;

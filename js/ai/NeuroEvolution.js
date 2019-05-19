@@ -227,7 +227,16 @@
       for (let i = 0; i < games.length; i++) {
         let a = this.pickBestPlayerByFitnessPool(games);
         let b = this.pickBestPlayerByFitnessPool(games);
-        let child = bestPlayerBrainsByFitness.push(this.mutateBrain(this.crossoverBrain(a.brain.clone(), b.brain.clone())));
+        let c = this.#bestGames[0];
+        let child;
+
+        if ( random(1) < 0.1) {
+          const ai = new Ai();
+          let d = new NeuralNetwork(ai.inputs, ai.neurons, 1);
+          child = bestPlayerBrainsByFitness.push(this.mutateBrain(this.crossoverBrain(c.brain.clone(), d)));
+        } else {
+          child = bestPlayerBrainsByFitness.push(this.mutateBrain(this.crossoverBrain(a.brain.clone(), b.brain.clone())));
+        }
 
         bestPlayerBrainsByFitness.push(child);
       }

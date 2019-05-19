@@ -213,7 +213,7 @@ class Game {
       this.#controller.spaceBarPressed = false;
       let skipAllFutureJumps = false;
 
-      this.addScore(-3);
+      this.addScore(-1);
 
       if ( this.#player.jumping ) {
         skipAllFutureJumps = true;
