@@ -1,3 +1,6 @@
+/**
+ * Base Level that all levels inherit from
+ */
 class LevelBase {
   #sections = []
   #sectionWidth = 40;

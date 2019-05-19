@@ -1,3 +1,6 @@
+/**
+ * Level 2 = Jumping dips only
+ */
 class LevelTwo extends LevelBase {
   #sectionsCount = 100;
   #sectionWidth = 40;
@@ -14,12 +17,10 @@ class LevelTwo extends LevelBase {
     for(var i=0; i<this.#sectionsCount; i++) {
       currentX += this.#sectionWidth;
       let height = levelBaseline;
-      const randomNumber = Math.floor(Math.random() * Math.floor(10));
-      if( 9 == randomNumber && sections.length > 3 && 40 == sections[(sections.length-1)].height && 40 == sections[(sections.length-2)].height ) {
-        height = 1;
-      } else if( randomNumber < 3 ) {
-        if( i > 2 && 40 == sections[(sections.length-1)].height && 40 == sections[(sections.length-2)].height && 40 == sections[(sections.length-3)].height ) {
-          height = 70;
+
+      if( Math.floor(Math.random() * Math.floor(10)) < 3 ) {
+        if( i > 2 && 40 == sections[(sections.length-1)].height && 40 == sections[(sections.length-2)].height ) {
+          height = 1;
         }
       }
 
