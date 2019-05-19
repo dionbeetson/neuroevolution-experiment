@@ -35,3 +35,40 @@ const clone = (obj) => {
 const sleep = (milliseconds) => {
   return new Promise(resolve => setTimeout(resolve, milliseconds))
 }
+
+const map = function(n, start1, stop1, start2, stop2, withinBounds) {
+  var newval = (n - start1) / (stop1 - start1) * (stop2 - start2) + start2;
+  if (!withinBounds) {
+    return newval;
+  }
+  if (start2 < stop2) {
+    return this.constrain(newval, start2, stop2);
+  } else {
+    return this.constrain(newval, stop2, start2);
+  }
+};
+
+
+var previous = false;
+
+const randomGaussian = (mean, sd) => {
+  var y1, x1, x2, w;
+  if (previous) {
+    y1 = y2;
+    previous = false;
+  } else {
+    do {
+      x1 = random(2) - 1;
+      x2 = random(2) - 1;
+      w = x1 * x1 + x2 * x2;
+    } while (w >= 1);
+    w = Math.sqrt(-2 * Math.log(w) / w);
+    y1 = x1 * w;
+    y2 = x2 * w;
+    previous = true;
+  }
+
+  var m = mean || 0;
+  var s = sd || 1;
+  return y1 * s + m;
+};
