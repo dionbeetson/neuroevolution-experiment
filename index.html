@@ -31,13 +31,17 @@
 				<label for="btn-speed">
 					Speed
 					<br>
-					<input id="btn-speed" type="range" min="1" max="8" step="1" value="8"/>
+					<input id="btn-speed" class="btn-speed" type="range" min="1" max="8" step="1" value="8"/>
 				</label>
 				<h2>Neural Network</h2>
 				<button id="btn-ml-it">Start Evolution</button>
-				<button id="btn-ml-save-top-brain">Save best</button>
-				<button id="btn-ml-load-top-brain-auto">Load best (auto)</button>
-				<button id="btn-ml-load-top-brain-manual">Load best (manual)</button>
+				<button id="btn-ml-save-brain-localstorage">Save to localStorage</button>
+				<button id="btn-ml-save-brain-disk">Save to disk</button>
+				<button id="btn-ml-load-brain-localstorage">Load from localStorage</button>
+				<label for="btn-ml-load-brain-disk" class="btn-ml-load-brain-disk-label">
+					Load from disk
+					<input type="file" id="btn-ml-load-brain-disk" />
+				</label>
 				<label for="ml-pause-before-next-generation">
 					<input id="ml-pause-before-next-generation" type="checkbox" />
 					Pause after generation

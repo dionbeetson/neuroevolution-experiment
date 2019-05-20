@@ -23,30 +23,55 @@ document.querySelector("#best-player-score").addEventListener("click", function(
   console,log(ai.neuroEvolution.bestGames);
 });
 
-document.querySelector("#btn-ml-save-top-brain").addEventListener('click', function (event) {
+document.querySelector("#btn-ml-save-brain-localstorage").addEventListener('click', function (event) {
   if( neuroEvolution.bestGames.length > 0 ) {
-    neuroEvolution.bestGames[0].brain.save('brain-manual')
+    neuroEvolution.bestGames[0].brain.save('brain')
   }
 });
 
-document.querySelector("#btn-ml-load-top-brain-auto").addEventListener('click', function (event) {
-  loadBrain('brain-auto');
+document.querySelector("#btn-ml-save-brain-disk").addEventListener('click', function (event) {
+  if( neuroEvolution.bestGames.length > 0 ) {
+    let brainJSON = neuroEvolution.bestGames[0].brain.stringify();
+    let a = document.createElement("a");
+    let file = new Blob([brainJSON], {type: 'application/json'});
+    a.href = URL.createObjectURL(file);
+    a.download = 'brain.json';
+    a.click();
+  }
 });
 
-document.querySelector("#btn-ml-load-top-brain-manual").addEventListener('click', function (event) {
-  loadBrain('brain-manual');
-});
-
-const loadBrain = (key) => {
+document.querySelector("#btn-ml-load-brain-localstorage").addEventListener('click', function (event) {
   cachedLevelSections = [];
   let games = neuroEvolution.pausedGames;
   neuroEvolution.pausedGames;
   neuroEvolution.reset();
 
-  let brainData = localStorage.getItem(key);
+  let brainData = localStorage.getItem('brain');
 
-  brainData = JSON.parse(brainData);
+  loadBrain(JSON.parse(brainData));
+});
 
+
+document.querySelector("#btn-ml-load-brain-disk").addEventListener('change', function (event) {
+  let file = this.files[0];
+  let reader = new FileReader()
+  let textFile = /application\/json/;
+  let fileText = '';
+
+  if (file.type.match(textFile)) {
+    reader.onload = function (event) {
+       let importedBrain = JSON.parse(event.target.result);
+
+       console.log(importedBrain);
+
+       loadBrain(importedBrain);
+    }
+  }
+
+  reader.readAsText(file);
+});
+
+const loadBrain = (brainData) => {
   const ai = new Ai();
   let brain = new NeuralNetwork(ai.inputs, ai.neurons, 1);
   brain.dispose();
@@ -58,6 +83,10 @@ const loadBrain = (key) => {
   for ( let i = 0; i < ai.totalGames; i++ ) {
     brains.push(brain);
   }
+
+  let games = neuroEvolution.pausedGames;
+  neuroEvolution.pausedGames;
+  neuroEvolution.reset();
 
   neuroEvolution.processGeneration(games, brains);
 };

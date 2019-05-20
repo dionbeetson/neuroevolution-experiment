@@ -57,12 +57,16 @@ class NeuralNetwork {
     this.output_weights.dispose();
   }
 
-  save( key ) {
+  stringify() {
     let brainToSave = {
       input_weights: this.input_weights.arraySync(),
       output_weights: this.output_weights.arraySync()
     };
 
-    localStorage.setItem(key, JSON.stringify(brainToSave));
+    return JSON.stringify(brainToSave);
+  }
+
+  save( key ) {
+    localStorage.setItem(key, this.stringify());
   }
 }

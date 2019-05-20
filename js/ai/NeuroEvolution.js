@@ -10,7 +10,7 @@
   #bestScores = null;
   #bestGames = [];
   #generation = 1;
-  #maxGenerations = 200;
+  #maxGenerations = 400;
   #pausedGames = [];
   #pausedBestPlayerBrainsByFitness = [];
   #inProgress = false;
@@ -213,7 +213,7 @@
       // Save game
       for ( let i = 0; i < games.length; i++ ) {
         if (games[i].game.isLevelPassed() ) {
-          games[i].brain.save('brain-auto');
+          games[i].brain.save('brain');
           for (let ii = 0; ii < games.length; ii++) {
             bestPlayerBrainsByFitness.push(games[i].brain.clone());
           }
@@ -247,8 +247,8 @@
 
   updateUIaddBestGenerationToBestScore( pickBestPlayerByFitness, timeTaken ) {
     let bestScore = document.createElement("li");
-    this.#neuroEvolutionChart.update(this.#bestProgressList.slice(-1).pop(), pickBestPlayerByFitness.game.getScore());
-    bestScore.innerHTML = pickBestPlayerByFitness.game.getScore() + ' (' + pickBestPlayerByFitness.game.getProgress().toFixed(1) + '%) (' + pickBestPlayerByFitness.fitness.toFixed(3) + ') (' + timeTaken + 's)';
+    this.#neuroEvolutionChart.update(pickBestPlayerByFitness.progress, pickBestPlayerByFitness.score);
+    bestScore.innerHTML = pickBestPlayerByFitness.score + ' (' + pickBestPlayerByFitness.progress.toFixed(1) + '%) (' + pickBestPlayerByFitness.fitness.toFixed(3) + ') (' + timeTaken + 's)';
     this.#bestScores.insertBefore(bestScore, document.querySelector("li:first-child"));
   }
 
