@@ -12,7 +12,8 @@ https://www.youtube.com/watch?v=c6y21FkaUqw
 Dived into and dissected the CartPole TensorFlow JS example
 https://github.com/tensorflow/tfjs-examples/tree/master/cart-pole
 
-Todo - add crossover and mutate call outs
+Used the mutate and crossover methods from
+https://github.com/llSourcell/Modeling_Evolution_with_TensorflowJS
 
 Water.css for the layout/CSS
 https://github.com/kognise/water.css

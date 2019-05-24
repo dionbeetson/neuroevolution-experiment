@@ -10,7 +10,7 @@
   #bestScores = null;
   #bestGames = [];
   #generation = 1;
-  #maxGenerations = 400;
+  #maxGenerations = 1500;
   #pausedGames = [];
   #pausedBestPlayerBrainsByFitness = [];
   #inProgress = false;
@@ -31,7 +31,7 @@
     // make sure a number from 0-1
     for ( let i = 0; i < games.length; i++ ) {
       let game = games[i];
-      games[i].fitness = (game.game.getScore() * game.game.getProgress());
+      games[i].fitness = game.game.getProgress();//(game.game.getScore() * game.game.getProgress());
       games[i].score = game.game.getScore();
       games[i].progress = game.game.getProgress();
     }
@@ -232,7 +232,7 @@
 
         if ( random(1) < 0.1) {
           const ai = new Ai();
-          let d = new NeuralNetwork(ai.inputs, ai.neurons, 1);
+          let d = new NeuralNetwork(ai.inputs, ai.neurons, ai.outputs);
           child = bestPlayerBrainsByFitness.push(this.mutateBrain(this.crossoverBrain(c.brain.clone(), d)));
         } else {
           child = bestPlayerBrainsByFitness.push(this.mutateBrain(this.crossoverBrain(a.brain.clone(), b.brain.clone())));

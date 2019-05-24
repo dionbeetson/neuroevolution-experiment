@@ -73,7 +73,7 @@ document.querySelector("#btn-ml-load-brain-disk").addEventListener('change', fun
 
 const loadBrain = (brainData) => {
   const ai = new Ai();
-  let brain = new NeuralNetwork(ai.inputs, ai.neurons, 1);
+  let brain = new NeuralNetwork(ai.inputs, ai.neurons, ai.outputs);
   brain.dispose();
 
   brain.input_weights = tf.tensor(brainData.input_weights);
