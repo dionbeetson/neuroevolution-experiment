@@ -14,7 +14,19 @@ class LevelThree extends LevelBase {
   generateSections(currentX, canvas, levelBaseline) {
     let sections = [];
 
-    for(var i=0; i<this.#sectionsCount; i++) {
+    currentX += this.#sectionWidth;
+    sections.push({height: 1, width: this.#sectionWidth, x: currentX, y: (canvas.height-1), fillStyle: this.#colors.section})
+
+    currentX += this.#sectionWidth;
+    sections.push({height: 40, width: this.#sectionWidth, x: currentX, y: (canvas.height-40), fillStyle: this.#colors.section})
+
+    currentX += this.#sectionWidth;
+    sections.push({height: 40, width: this.#sectionWidth, x: currentX, y: (canvas.height-40), fillStyle: this.#colors.section})
+
+    currentX += this.#sectionWidth;
+    sections.push({height: 70, width: this.#sectionWidth, x: currentX, y: (canvas.height-70), fillStyle: this.#colors.section})
+
+    for(let i = 3; i<this.#sectionsCount; i++) {
       currentX += this.#sectionWidth;
       let height = levelBaseline;
       const randomNumber = Math.floor(Math.random() * Math.floor(10));
