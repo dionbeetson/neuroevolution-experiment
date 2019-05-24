@@ -3,6 +3,19 @@ This is an experimentation project I've been working on to explore NeuroEvolutio
 
 The difference in this solution compared to other solutions on the Internet is that instead of building ML directly into the core game source code, the ML and Game source code are completely decoupled. This simulates a much more realistic real world example, as you would rarely have direct access to the source code when applying ML (you would only have access to specific inputs). I created an an API/SDK for the browser based game to expose some key functionality, but end state is to use image analysis so this solution is more adaptable to other applications.
 
+# Getting started
+npm install
+npm run dev
+
+This will open http://127.0.0.1:8080/ within your browser.
+
+Then (to watch the neuroevolution in action)
+1. Choose level
+2. Press 'Start evolution' button
+
+Or load an existing model
+1. 'Choose a file/model' to load from disk from model/ directory
+
 # Call outs on borrowed/influenced code/tutorials
 I borrowed a lot from existing tutorials out there on this topic.
 

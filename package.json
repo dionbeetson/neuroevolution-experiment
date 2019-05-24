@@ -5,10 +5,12 @@
   "main": "index.js",
   "dependencies": {
     "@tensorflow/tfjs": "^1.1.2",
-    "chart.js": "^2.8.0"
+    "chart.js": "^2.8.0",
+    "http-server": "^0.11.1"
   },
   "devDependencies": {},
   "scripts": {
+    "dev": "http-server -o",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dion Beetson",
