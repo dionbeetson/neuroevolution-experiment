@@ -5,6 +5,7 @@
   #totalGames = 9;
   #inputs = 8;
   #neurons = 40;
+  #outputs = 2;
   #games = [];
   #gamesRunning = 0;
   #sectionsToSeeAhead = 1;
@@ -25,7 +26,7 @@
       if ( undefined !== brains && brains[i] instanceof NeuralNetwork ) {
         brain = brains[i];
       } else {
-        brain = new NeuralNetwork(this.#inputs, this.#neurons, 1);
+        brain = new NeuralNetwork(this.#inputs, this.#neurons, this.#outputs);
       }
 
       this.#games[i] = {
@@ -138,7 +139,7 @@
     let inputTensor = tf.tidy(() => { tf.tensor2d([ inputsNormalised ]) });
     let outputs = game.brain.predict(inputsNormalised);
 
-    if (outputs[0] > 0.5) {
+    if ( outputs[0] > 0.5 || outputs[1] > 0.5 ) {
       game.game.jump();
     }
   }
@@ -163,5 +164,9 @@
 
   get neurons(){
     return this.#neurons;
+  }
+
+  get outputs(){
+    return this.#outputs;
   }
 }
