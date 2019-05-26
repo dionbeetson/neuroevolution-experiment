@@ -34,7 +34,7 @@ Water.css for the layout/CSS
 https://github.com/kognise/water.css
 
 # Tutorial
-http://dionbeetson.blogspot.com/ (coming soon)
+https://dionbeetson.blogspot.com/2019/05/neuroevolution-using-tensorflowjs-part-1.html
 
 # Key features include
  - Completely browser based using TensorFlowJS
