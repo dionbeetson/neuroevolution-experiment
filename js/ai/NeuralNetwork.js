@@ -3,16 +3,12 @@
  * Mostly taken from https://github.com/llSourcell/Modeling_Evolution_with_TensorflowJS/blob/master/Docs/NeuroEvolution_nn.js.html
  */
 class NeuralNetwork {
-  /**
-   * Takes in the number of input nodes, hidden node and output nodes
-   * @constructor
-   * @param {number} input_nodes
-   * @param {number} hidden_nodes
-   * @param {number} output_nodes
-   */
   constructor(input_nodes, hidden_nodes, output_nodes) {
+    // The amount of inputs (eg: player y position, height of next block etc..)
     this.input_nodes = input_nodes;
+    // Amount of hidden nodes within the Neural Network)
     this.hidden_nodes = hidden_nodes;
+    // The amount of outputs, we will use 2 (will be needed for level 3)
     this.output_nodes = output_nodes;
 
     // Initialize random weights

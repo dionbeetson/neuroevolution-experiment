@@ -5,7 +5,6 @@
 
   #discountRate = 0.95;
   #learningRate = 0.05;
-  #bestProgressList = [];
   #neuroEvolutionChart = new NeuroEvolutionChart();
   #bestScores = null;
   #bestGames = [];
@@ -13,7 +12,6 @@
   #maxGenerations = 1500;
   #pausedGames = [];
   #pausedBestPlayerBrainsByFitness = [];
-  #inProgress = false;
   #pauseBeforeNextGeneration = false;
 
   constructor() {
@@ -21,17 +19,9 @@
   }
 
   calculateFitness(games) {
-    let sum = 0;
-
-    // Iterate over all games, and get score (add to sum)
-    for (let game of games ) {
-      sum += game.game.getScore() * game.game.getProgress();
-    }
-
-    // make sure a number from 0-1
     for ( let i = 0; i < games.length; i++ ) {
       let game = games[i];
-      games[i].fitness = game.game.getProgress();//(game.game.getScore() * game.game.getProgress());
+      games[i].fitness = game.game.getProgress() / 100;
       games[i].score = game.game.getScore();
       games[i].progress = game.game.getProgress();
     }
@@ -187,16 +177,14 @@
     // Did one of the games finish?
     let gamePassedLevel = this.didAtLeastOneGameCompleteLevel(games);
 
-    let pickBestPlayerByFitness = gamePassedLevel;
+    let bestPlayerByFitness = gamePassedLevel;
     let bestPlayerBrainsByFitness = [];
 
-    if( false === pickBestPlayerByFitness ){
-        pickBestPlayerByFitness = this.pickBestPlayerByActualFitness(games);
+    if( false === bestPlayerByFitness ){
+        bestPlayerByFitness = this.pickBestPlayerByActualFitness(games);
     }
 
-    this.updateUIaddBestGenerationToBestScore(pickBestPlayerByFitness, timeTaken);
-
-    this.#bestGames.push(pickBestPlayerByFitness);
+    this.#bestGames.push(bestPlayerByFitness);
     this.#bestGames.sort(this.sortByFitness);
 
     // Only keep top 5 best scores
@@ -204,13 +192,15 @@
       this.#bestGames = this.#bestGames.slice(0, 5);
     }
 
-    this.updateUIBestPlayerScore(this.#bestGames[0]);
+    // Update UI - Chart
+    this.#neuroEvolutionChart.update(bestPlayerByFitness.progress, bestPlayerByFitness.score);
 
-    // Update round
+    // Update UI
+    this.updateUIaddBestGenerationToBestScore(bestPlayerByFitness, timeTaken);
+    this.updateUIBestPlayerScore(this.#bestGames[0]);
     this.updateUIRoundInformation();
 
     if ( false != gamePassedLevel ) {
-      // Save game
       for ( let i = 0; i < games.length; i++ ) {
         if (games[i].game.isLevelPassed() ) {
           games[i].brain.save('brain');
@@ -220,7 +210,7 @@
         }
       }
 
-      console.log('Passed: bestGames: ', this.#bestGames[0], this.#bestGames.length, this.#bestGames);
+      console.log('Level Passed:', this.#bestGames[0], this.#bestGames.length, this.#bestGames);
       this.processGeneration(games, bestPlayerBrainsByFitness);
     } else {
       // Breeding
@@ -247,7 +237,6 @@
 
   updateUIaddBestGenerationToBestScore( pickBestPlayerByFitness, timeTaken ) {
     let bestScore = document.createElement("li");
-    this.#neuroEvolutionChart.update(pickBestPlayerByFitness.progress, pickBestPlayerByFitness.score);
     bestScore.innerHTML = pickBestPlayerByFitness.score + ' (' + pickBestPlayerByFitness.progress.toFixed(1) + '%) (' + pickBestPlayerByFitness.fitness.toFixed(3) + ') (' + timeTaken + 's)';
     this.#bestScores.insertBefore(bestScore, document.querySelector("li:first-child"));
   }

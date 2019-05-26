@@ -87,10 +87,6 @@
 
     let section = game.game.getSectionFromPlayer(this.#sectionsToSeeAhead);
 
-    if ( section == undefined ) {
-      throw ('ERROR 2nd closest section');
-    }
-
     // 2nd closest section x
     inputs[2] = section.x + section.width;
     inputsNormalised[2] = map(inputs[2], inputs[1], game.game.getWidth(), 0, 1);
@@ -136,7 +132,6 @@
       }
     ]);
 
-    let inputTensor = tf.tidy(() => { tf.tensor2d([ inputsNormalised ]) });
     let outputs = game.brain.predict(inputsNormalised);
 
     if ( outputs[0] > 0.5 || outputs[1] > 0.5 ) {

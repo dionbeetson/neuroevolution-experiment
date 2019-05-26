@@ -11,6 +11,7 @@
   "devDependencies": {},
   "scripts": {
     "dev": "http-server -o",
+    "setup-tutorial": "mv js/ai js/ai-source",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dion Beetson",

@@ -19,10 +19,6 @@ document.querySelector("#ml-pause-before-next-generation").addEventListener("cha
 
 neuroEvolution.pauseBeforeNextGeneration = document.querySelector("#ml-pause-before-next-generation").checked;
 
-document.querySelector("#best-player-score").addEventListener("click", function() {
-  console,log(ai.neuroEvolution.bestGames);
-});
-
 document.querySelector("#btn-ml-save-brain-localstorage").addEventListener('click', function (event) {
   if( neuroEvolution.bestGames.length > 0 ) {
     neuroEvolution.bestGames[0].brain.save('brain')
