@@ -3,6 +3,9 @@ This is an experimentation project I've been working on to explore NeuroEvolutio
 
 The difference in this solution compared to other solutions on the Internet is that instead of building ML directly into the core game source code, the ML and Game source code are completely decoupled. This simulates a much more realistic real world example, as you would rarely have direct access to the source code when applying ML (you would only have access to specific inputs). I created an an API/SDK for the browser based game to expose some key functionality, but end state is to use image analysis so this solution is more adaptable to other applications.
 
+# Requirements
+None, this is entirely browser based. Well maybe just grab the latest version of Chrome.
+
 # Getting started
 ```
 npm install
