@@ -17,7 +17,7 @@
     this.#completeCallback = completeCallback;
   }
 
-  start(brains, completeCallback) {
+  start(useImageRecognition, brains, completeCallback) {
     this.#timeTakenDateStart = new Date();
 
     for ( let i = 0; i < this.#totalGames; i++ ) {
@@ -29,8 +29,16 @@
         brain = new NeuralNetwork(this.#inputs, this.#neurons, this.#outputs);
       }
 
+      let game;
+
+      if ( useImageRecognition ) {
+        game = new GameImageRecognition();
+      } else {
+        game = new GameApi();
+      }
+
       this.#games[i] = {
-        game: new GameApi(),
+        game: game,
         brain: brain,
         interval: null
       }
@@ -117,6 +125,10 @@
       {
         x: 0,
         y: inputs[0]
+      },
+      {
+        x: inputs[1],
+        y: 0
       },
       {
         x: inputs[2],
