@@ -5,9 +5,17 @@
 // Todo: Remove global variable
 let neuroEvolution = new NeuroEvolution();
 
-document.querySelector("#btn-ml-it").addEventListener('click', function (event) {
+document.querySelector("#btn-ml-start").addEventListener('click', function (event) {
   neuroEvolution.processGeneration([]);
 }, false);
+
+document.querySelector("#ml-use-object-recognition").addEventListener("change", function() {
+  if ( this.checked ) {
+    neuroEvolution.useImageRecognition = true;
+  } else {
+    neuroEvolution.useImageRecognition = false;
+  }
+});
 
 document.querySelector("#ml-pause-before-next-generation").addEventListener("change", function() {
   neuroEvolution.pauseBeforeNextGeneration = this.checked;
@@ -86,3 +94,9 @@ const loadBrain = (brainData) => {
 
   neuroEvolution.processGeneration(games, brains);
 };
+
+document.querySelector("#ml-enable-vision").addEventListener("change", function() {
+  neuroEvolution.enableMlVision = this.checked;
+});
+
+neuroEvolution.enableMlVision = document.querySelector("#ml-enable-vision").checked;
