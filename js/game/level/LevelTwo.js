@@ -20,7 +20,7 @@ class LevelTwo extends LevelBase {
 
       if( Math.floor(Math.random() * Math.floor(10)) < 3 ) {
         if( i > 2 && 40 == sections[(sections.length-1)].height && 40 == sections[(sections.length-2)].height ) {
-          height = 1;
+          height = 10;
         }
       }
 

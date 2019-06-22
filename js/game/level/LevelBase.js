@@ -8,7 +8,7 @@ class LevelBase {
   #lastSectionHeight = this.levelBaseline;
   #colors = {
     section: '#A1CFBC',
-    sectionActive: '#91C7B1',
+    sectionActive: '#A1CFBC',
     sectionLookAheadHighlight: '#E3D081',
     sectionCollide: '#B33951'
   };
@@ -40,6 +40,10 @@ class LevelBase {
   };
 
   draw(ctx) {
+    ctx.rect(0, 0, 500, 500);
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fill();
+
     for(var i=0; i<this.#sections.length; i++) {
       ctx.beginPath();
       ctx.globalAlpha = 0.4;
