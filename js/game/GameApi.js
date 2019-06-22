@@ -24,6 +24,18 @@ class GameApi {
     return this.#game.isSetup;
   }
 
+  getId() {
+    return this.#game.id;
+  }
+
+  getContainer() {
+    return this.#game.container;
+  }
+
+  getCanvas() {
+    return this.#game.canvas;
+  }
+
   getHeight() {
     return this.#game.getHeight();
   }
