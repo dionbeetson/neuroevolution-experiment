@@ -8,7 +8,7 @@ class Player {
   #jumping = false;
   #ground = 0;
   #colors = {
-    player: '#54494B',
+    player: '#000000',
     playerCantJump: '#B33951'
   }
 
