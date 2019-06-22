@@ -34,7 +34,11 @@
 					<input id="btn-speed" class="btn-speed" type="range" min="1" max="8" step="1" value="8"/>
 				</label>
 				<h2>Neural Network</h2>
-				<button id="btn-ml-it">Start Evolution</button>
+				<label for="ml-use-object-recognition">
+					<input id="ml-use-object-recognition" type="checkbox" />
+					Use Object Recognition
+				</label>
+				<button id="btn-ml-start">Start Evolution</button>
 				<button id="btn-ml-save-brain-localstorage">Save to localStorage</button>
 				<button id="btn-ml-save-brain-disk">Save to disk</button>
 				<button id="btn-ml-load-brain-localstorage">Load from localStorage</button>
@@ -45,6 +49,10 @@
 				<label for="ml-pause-before-next-generation">
 					<input id="ml-pause-before-next-generation" type="checkbox" />
 					Pause after generation
+				</label>
+				<label for="ml-enable-vision">
+					<input id="ml-enable-vision" type="checkbox" checked />
+					Enable ML vision
 				</label>
 			</div>
 			<div id="games-container" class="games-container"></div>
@@ -80,6 +88,7 @@
 		<script src ="js/ai/NeuroEvolution.js"></script>
 		<script src ="js/ai/NeuroEvolutionChart.js"></script>
 		<script src ="js/ai/Ai.js"></script>
+		<script src ="js/ai/GameImageRecognition.js"></script>
 		<script src ="js/ai/ui.js"></script>
 	</body>
 </html>
