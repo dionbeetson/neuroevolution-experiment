@@ -190,9 +190,9 @@ class GameImageRecognition {
     }
 
     const findBottomRightBoundsOfSolidSection = (x, y, counter) => {
-      if ( counter < 5 && false === this.isSectionSolid(x, y) ) {
+      if ( counter < 5 && false === isSectionSolid(x, y) ) {
         counter++
-        return this.findBottomRightBoundsOfSolidSection(x+this.#visualTrackingMapSize, y, counter)
+        return findBottomRightBoundsOfSolidSection(x+this.#visualTrackingMapSize, y, counter)
       }
 
       return [x,y];
