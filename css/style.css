@@ -145,6 +145,12 @@ canvas .trend {
   margin: 0px;
 }
 
+canvas.snapshot-canvas{
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 .btn-ml-load-brain-disk-label {
   overflow: hidden;
 }
