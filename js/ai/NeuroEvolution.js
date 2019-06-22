@@ -13,6 +13,8 @@
   #pausedGames = [];
   #pausedBestPlayerBrainsByFitness = [];
   #pauseBeforeNextGeneration = false;
+  #enableMlVision = false;
+  #useImageRecognition = false;
 
   constructor() {
     this.#bestScores = document.querySelector("#best-scores");
@@ -156,7 +158,7 @@
         this.#generation++;
 
         const ai = new Ai(this.completeGeneration.bind(this));
-        ai.start(bestPlayerBrainsByFitness);
+        ai.start(this.#useImageRecognition, bestPlayerBrainsByFitness);
 
       } else {
         this.#pausedGames = games;
@@ -282,6 +284,14 @@
 
   set pauseBeforeNextGeneration( pauseBeforeNextGeneration ) {
     this.#pauseBeforeNextGeneration = pauseBeforeNextGeneration;
+  }
+
+  set useImageRecognition( useImageRecognition ) {
+    this.#useImageRecognition = useImageRecognition;
+  }
+
+  set enableMlVision( enableMlVision ) {
+    this.#enableMlVision = enableMlVision;
   }
 
   reset() {
