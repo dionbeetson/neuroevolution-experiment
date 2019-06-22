@@ -52,7 +52,8 @@ class Game {
 
   setup() {
     const d = new Date();
-    this.#id = d.getTime() + '-' + random(1, 1000000);
+    this.#id = (d.getTime() + '-' + random(1, 1000000)).replace('.', '-');
+
     const gamesContainer = document.querySelector("#games-container");
     this.#container = document.createElement("div");
     this.#container.setAttribute('class', 'game-container');
@@ -410,7 +411,7 @@ class Game {
     // The game drawer
     let gameRedraw = () => {
 
-      setTimeout(function(){
+      setTimeout(() => {
         self.draw();
         self.#isSetup = true;
 
@@ -425,6 +426,18 @@ class Game {
 
   get id(){
     return this.#id;
+  }
+
+  get ctx(){
+    return this.#ctx;
+  }
+
+  get container(){
+    return this.#container;
+  }
+
+  get canvas(){
+    return this.#canvas;
   }
 
   getHeight() {
