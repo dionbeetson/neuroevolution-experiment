@@ -205,7 +205,8 @@ class GameImageRecognition {
       return [xyStart[0], xyStart[1], xyEnd[0] - x, y - xyEnd[1] + this.#visualTrackingMapSize];
     } else {
       // Look for drop/dip section ahead we need to jump over
-      if ( false === this.isPlayerJumping() && false === isSectionSolid(x, y+this.#visualTrackingMapSize) ) {
+      y = this.#playerGroundY;
+      if (  false === isSectionSolid(x, y+this.#visualTrackingMapSize) ) {
         let xyStart = findBottomLeftBoundsOfSolidSection(x, y);
         let xyEnd = findBottomRightBoundsOfSolidSection(xyStart[0], xyStart[1], 1);
         return [xyStart[0], y+this.#visualTrackingMapSize, xyEnd[0] - x, xyStart[1]];
