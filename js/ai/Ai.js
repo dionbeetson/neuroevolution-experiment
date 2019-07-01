@@ -17,45 +17,45 @@
     this.#completeCallback = completeCallback;
   }
 
-  start(useImageRecognition, brains, completeCallback) {
+  start(useImageRecognition, neuralNetworks, completeCallback) {
     this.#timeTakenDateStart = new Date();
 
     for ( let i = 0; i < this.#totalGames; i++ ) {
-      let brain;
+      let neuralNetwork;
 
-      if ( undefined !== brains && brains[i] instanceof NeuralNetwork ) {
-        brain = brains[i];
+      if ( undefined !== neuralNetworks && neuralNetworks[i] instanceof NeuralNetwork ) {
+        neuralNetwork = neuralNetworks[i];
       } else {
-        brain = new NeuralNetwork(this.#inputs, this.#neurons, this.#outputs);
+        neuralNetwork = new NeuralNetwork(this.#inputs, this.#neurons, this.#outputs);
       }
 
-      let game;
+      let gameApi;
 
       if ( useImageRecognition ) {
-        game = new GameImageRecognition();
+        gameApi = new GameImageRecognition();
       } else {
-        game = new GameApi();
+        gameApi = new GameApi();
       }
 
       this.#games[i] = {
-        game: game,
-        brain: brain,
+        gameApi: gameApi,
+        neuralNetwork: neuralNetwork,
         interval: null
       }
 
       // Debug look ahead
-      this.#games[i].game.setHighlightSectionAhead(this.#sectionsToSeeAhead)
+      this.#games[i].gameApi.setHighlightSectionAhead(this.#sectionsToSeeAhead)
 
       // Start game
       this.#gamesRunning++;
-      this.#games[i].game.start();
+      this.#games[i].gameApi.start();
 
       this.#games[i].interval = setInterval(this.checkGame.bind(null, this, this.#games, this.#games[i]), 50);
     }
   }
 
   checkGame(ai, games, game) {
-    if( game.game.isOver() ) {
+    if( game.gameApi.isOver() ) {
       clearInterval(game.interval);
 
       ai.#gamesRunning--;
@@ -68,7 +68,7 @@
         ai.#completeCallback(games, timeTaken);
       }
     } else {
-      if( game.game.isSetup() ) {
+      if( game.gameApi.isSetup() ) {
         ai.think(game);
 
         if ( ai.#gamesRunning <= ai.#forceDrawGameLeftCount ) {
@@ -86,42 +86,42 @@
     let inputsNormalised = [];
 
     // Player y
-    inputs[0] = (game.game.getPlayerY());
-    inputsNormalised[0] = map(inputs[0], 0, game.game.getHeight(), 0, 1);
+    inputs[0] = (game.gameApi.getPlayerY());
+    inputsNormalised[0] = map(inputs[0], 0, game.gameApi.getHeight(), 0, 1);
 
     // Player x
-    inputs[1] = game.game.getPlayerX();
-    inputsNormalised[1] = map(inputs[1], inputs[1], game.game.getWidth(), 0, 1);
+    inputs[1] = game.gameApi.getPlayerX();
+    inputsNormalised[1] = map(inputs[1], inputs[1], game.gameApi.getWidth(), 0, 1);
 
-    let section = game.game.getSectionFromPlayer(this.#sectionsToSeeAhead);
+    let section = game.gameApi.getSectionFromPlayer(this.#sectionsToSeeAhead);
 
     // 2nd closest section x
     inputs[2] = section.x + section.width;
-    inputsNormalised[2] = map(inputs[2], inputs[1], game.game.getWidth(), 0, 1);
+    inputsNormalised[2] = map(inputs[2], inputs[1], game.gameApi.getWidth(), 0, 1);
 
     // 2nd closest section y
     inputs[3] = section.y;
-    inputsNormalised[3] = map(inputs[3], 0, game.game.getHeight(), 0, 1);
+    inputsNormalised[3] = map(inputs[3], 0, game.gameApi.getHeight(), 0, 1);
 
     // 2nd closest section y base
     inputs[4] = section.y + section.height;
-    inputsNormalised[4] = map(inputs[4], 0, game.game.getHeight(), 0, 1);
+    inputsNormalised[4] = map(inputs[4], 0, game.gameApi.getHeight(), 0, 1);
 
-    section = game.game.getSectionFromPlayer((this.#sectionsToSeeAhead+1));
+    section = game.gameApi.getSectionFromPlayer((this.#sectionsToSeeAhead+1));
 
     // Is player jumping
-    inputs[5] = (game.game.isPlayerJumping() ? 1 : 0);
+    inputs[5] = (game.gameApi.isPlayerJumping() ? 1 : 0);
     inputsNormalised[5] = map(inputs[5], 0, 1, 0, 1);
 
     // Player velocity
-    inputs[6] = (game.game.getPlayerVelocity() ? 1 : 0);
+    inputs[6] = (game.gameApi.getPlayerVelocity() ? 1 : 0);
     inputsNormalised[6] = map(inputs[6], -1.1, 1.1, 0, 1);
 
     // Can play jump?
-    inputs[7] = (game.game.canPlayerJump() ? 1 : 0);
+    inputs[7] = (game.gameApi.canPlayerJump() ? 1 : 0);
     inputsNormalised[7] = map(inputs[7], 0, 1, 0, 1);
 
-    game.game.setDebugPoints([
+    game.gameApi.setDebugPoints([
       {
         x: 0,
         y: inputs[0]
@@ -144,16 +144,16 @@
       }
     ]);
 
-    let outputs = game.brain.predict(inputsNormalised);
+    let outputs = game.neuralNetwork.predict(inputsNormalised);
 
     if ( outputs[0] > 0.5 || outputs[1] > 0.5 ) {
-      game.game.jump();
+      game.gameApi.jump();
     }
   }
 
   areAllGamesOver(games) {
     for ( let i = 0; i < this.#totalGames; i++ ) {
-      if( false == games[i].game.isOver() ) {
+      if( false == games[i].gameApi.isOver() ) {
         return false;
       }
     }

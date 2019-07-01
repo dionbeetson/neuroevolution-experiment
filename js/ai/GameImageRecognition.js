@@ -198,18 +198,23 @@ class GameImageRecognition {
       return [x,y];
     }
 
+    // Look for drop/dip section ahead we need to jump over
+    y = this.#playerGroundY;
+
     if ( isSectionSolid(x, y) ) {
       // Look for taller section ahead we need to jump over
       let xyStart = findTopLeftBoundsOfSolidSection(x, y-this.#visualTrackingMapSize);
       let xyEnd = findTopRightBoundsOfSolidSection(xyStart[0], xyStart[1], 1);
+
       return [xyStart[0], xyStart[1], xyEnd[0] - x, y - xyEnd[1] + this.#visualTrackingMapSize];
     } else {
-      // Look for drop/dip section ahead we need to jump over
-      y = this.#playerGroundY;
+
       if (  false === isSectionSolid(x, y+this.#visualTrackingMapSize) ) {
         let xyStart = findBottomLeftBoundsOfSolidSection(x, y);
         let xyEnd = findBottomRightBoundsOfSolidSection(xyStart[0], xyStart[1], 1);
-        return [xyStart[0], y+this.#visualTrackingMapSize, xyEnd[0] - x, xyStart[1]];
+
+        return [xyStart[0], xyEnd[1]+this.#visualTrackingMapSize, xyEnd[0] - x, this.#visualTrackingMapSize];
+        // return [xyStart[0], y+this.#visualTrackingMapSize, xyEnd[0] - x, xyEnd[1]-y];
       }
     }
 

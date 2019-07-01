@@ -54,12 +54,12 @@ class NeuralNetwork {
   }
 
   stringify() {
-    let brainToSave = {
+    let neuralNetworkToSave = {
       input_weights: this.input_weights.arraySync(),
       output_weights: this.output_weights.arraySync()
     };
 
-    return JSON.stringify(brainToSave);
+    return JSON.stringify(neuralNetworkToSave);
   }
 
   save( key ) {
