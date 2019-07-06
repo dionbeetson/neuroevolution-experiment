@@ -50,168 +50,125 @@ class GameImageRecognition {
 
   // Method to extract data from canvas/image and convert it into a readable format for this class to use
   extractVisualTrackingData(){
-    const convertImageToGreyScale = (image) => {
-      let greyImage = new ImageData(image.width, image.height);
-      const channels = image.data.length / 4;
-      for( let i=0; i < channels; i++ ){
-        let i4 = i*4;
-        let r = image.data[i4 + 0];
-        let g = image.data[i4 + 1];
-        let b = image.data[i4 + 2];
-
-        greyImage.data[i4 + 0] = Math.round(0.21*r + 0.72*g + 0.07*b);
-        greyImage.data[i4 + 1] = g;
-        greyImage.data[i4 + 2] = b;
-        greyImage.data[i4 + 3] = 255;
-      }
-
-      return greyImage;
-    }
-
-    const getRGBAFromImageByXY = (imageData, x, y) => {
-      let rowStart = y * imageData.width * 4;
-      let pixelIndex = rowStart + x * 4;
-
-      return [
-        imageData.data[pixelIndex],
-        imageData.data[pixelIndex+1],
-        imageData.data[pixelIndex+2],
-        imageData.data[pixelIndex+3],
-      ]
-    }
-
-    // Method to create an object indexed by xposition and yposition with the color as the value, eg: 10x40 = grey
-    const generateVisualTrackingMap = (data, width, height, visualTrackingMapSize, colors) => {
-      let visualTrackingMap = {};
-      for( let y = 0; y < height; y+=visualTrackingMapSize ) {
-        for( let x = 0; x < width; x+=visualTrackingMapSize ) {
-          let col = getRGBAFromImageByXY(data, x+5, y+5)
-          let key = x+'x'+y;
-          visualTrackingMap[key] = colors.background;
-
-          if ( 0 == col[0] ) {
-            visualTrackingMap[key] = colors.player;
-          }
-
-          if ( col[0] > 210 && col[0] < 240 ) {
-            visualTrackingMap[key] = colors.block;
-          }
-        }
-      }
-
-      return visualTrackingMap;
-    }
-
-    const updatePlayerPositionFromVisualTrackingMap = (visualTrackingMap, colors) => {
-      for (const xy in visualTrackingMap) {
-        let value = visualTrackingMap[xy];
-
-        if ( colors.player == value) {
-          let position = xy.split('x');
-          this.#playerX = parseInt(position[0]);
-          this.#playerY = parseInt(position[1]);
-
-          // If we dont have a ground, then set it
-          if( 0 == this.#playerGroundY ) {
-            this.#playerGroundY = this.#playerY;
-          }
-        }
-      }
-    }
-
-    const getSectionAhead = (playerX, playerY, aheadIndex, pixelMapSize, playerGroundY) => {
-      let x;
-      let y;
-      let section;
-      let aheadWidth = aheadIndex*10;
-
-      x = Math.ceil(playerX/pixelMapSize) * pixelMapSize + aheadWidth;
-      y = Math.ceil(playerY/pixelMapSize) * pixelMapSize;
-
-      section = this.getCollisionSectionAhead(x, y);
-
-      if( false == section ) {
-        section = [x, playerGroundY+pixelMapSize, pixelMapSize, pixelMapSize];
-      }
-
-      return {
-        x: section[0],
-        y: section[1],
-        width: section[2],
-        height: section[3],
-      };
-    }
-
     let data = this.#gameApiCanvas.getContext('2d').getImageData(0, 0, this.#visualTrackingCanvas.width, this.#visualTrackingCanvas.height);
-    let dataGrey = convertImageToGreyScale(data);
+    let dataGrey = this.convertImageToGreyScale(data);
 
-    this.#visualTrackingMap = generateVisualTrackingMap(dataGrey, this.#visualTrackingCanvas.width, this.#visualTrackingCanvas.height, this.#visualTrackingMapSize, this.#colors);
+    this.#visualTrackingMap = this.generateVisualTrackingMap(dataGrey, this.#visualTrackingCanvas.width, this.#visualTrackingCanvas.height, this.#visualTrackingMapSize, this.#colors);
 
-    updatePlayerPositionFromVisualTrackingMap(this.#visualTrackingMap, this.#colors);
+    this.updatePlayerPositionFromVisualTrackingMap(this.#visualTrackingMap, this.#colors);
 
-    this.#sectionAhead = getSectionAhead(this.#playerX, this.#playerY, 4, this.#visualTrackingMapSize, this.#playerGroundY);
+    this.#sectionAhead = this.getSectionAhead(this.#playerX, this.#playerY, 4, this.#visualTrackingMapSize, this.#playerGroundY);
+  }
+
+  convertImageToGreyScale(image) {
+    let greyImage = new ImageData(image.width, image.height);
+    const channels = image.data.length / 4;
+    for( let i=0; i < channels; i++ ){
+      let i4 = i*4;
+      let r = image.data[i4 + 0];
+      let g = image.data[i4 + 1];
+      let b = image.data[i4 + 2];
+
+      greyImage.data[i4 + 0] = Math.round(0.21*r + 0.72*g + 0.07*b);
+      greyImage.data[i4 + 1] = g;
+      greyImage.data[i4 + 2] = b;
+      greyImage.data[i4 + 3] = 255;
+    }
+
+    return greyImage;
+  }
+
+  getRGBAFromImageByXY(imageData, x, y) {
+    let rowStart = y * imageData.width * 4;
+    let pixelIndex = rowStart + x * 4;
+
+    return [
+      imageData.data[pixelIndex],
+      imageData.data[pixelIndex+1],
+      imageData.data[pixelIndex+2],
+      imageData.data[pixelIndex+3],
+    ]
+  }
+
+  // Method to create an object indexed by xposition and yposition with the color as the value, eg: 10x40 = grey
+  generateVisualTrackingMap(data, width, height, visualTrackingMapSize, colors) {
+    let visualTrackingMap = {};
+    for( let y = 0; y < height; y+=visualTrackingMapSize ) {
+      for( let x = 0; x < width; x+=visualTrackingMapSize ) {
+        let col = this.getRGBAFromImageByXY(data, x+5, y+5)
+        let key = x+'x'+y;
+        visualTrackingMap[key] = colors.background;
+
+        if ( 0 == col[0] ) {
+          visualTrackingMap[key] = colors.player;
+        }
+
+        if ( col[0] > 210 && col[0] < 240 ) {
+          visualTrackingMap[key] = colors.block;
+        }
+      }
+    }
+
+    return visualTrackingMap;
+  }
+
+  updatePlayerPositionFromVisualTrackingMap(visualTrackingMap, colors) {
+    for (const xy in visualTrackingMap) {
+      let value = visualTrackingMap[xy];
+
+      if ( colors.player == value) {
+        let position = xy.split('x');
+        this.#playerX = parseInt(position[0]);
+        this.#playerY = parseInt(position[1]);
+
+        // If we dont have a ground, then set it
+        if( 0 == this.#playerGroundY ) {
+          this.#playerGroundY = this.#playerY;
+        }
+      }
+    }
+  }
+
+  getSectionAhead(playerX, playerY, aheadIndex, pixelMapSize, playerGroundY){
+    let x;
+    let y;
+    let section;
+    let aheadWidth = aheadIndex*10;
+
+    x = Math.ceil(playerX/pixelMapSize) * pixelMapSize + aheadWidth;
+    y = Math.ceil(playerY/pixelMapSize) * pixelMapSize;
+
+    section = this.getCollisionSectionAhead(x, y);
+
+    if( false == section ) {
+      section = [x, playerGroundY+pixelMapSize, pixelMapSize, pixelMapSize];
+    }
+
+    return {
+      x: section[0],
+      y: section[1],
+      width: section[2],
+      height: section[3],
+    };
   }
 
   // Logic to get the xy and width/height of the section ahead that we need to use to determine if we jump over or not
   getCollisionSectionAhead(x, y) {
 
-    const isSectionSolid = (x, y) => {
-      let section = this.#visualTrackingMap[x + 'x'  +y];
-      if ( this.#colors.block == section ) {
-        return true;
-      }
-
-      return false;
-    }
-
-    const findTopLeftBoundsOfSolidSection = (x, y) => {
-      if ( isSectionSolid(x, y) ) {
-        return findTopLeftBoundsOfSolidSection(x, y-this.#visualTrackingMapSize)
-      }
-
-      return [x,y+this.#visualTrackingMapSize];
-    }
-
-    const findTopRightBoundsOfSolidSection = (x, y, counter) => {
-      if ( counter < 5 && isSectionSolid(x, y) ) {
-        counter++
-        return findTopRightBoundsOfSolidSection(x+this.#visualTrackingMapSize, y, counter)
-      }
-
-      return [x,y];
-    }
-
-    const findBottomLeftBoundsOfSolidSection = (x, y) => {
-      if ( false === isSectionSolid(x, y) && y < this.#visualTrackingCanvas.height) {
-        return findBottomLeftBoundsOfSolidSection(x, y+this.#visualTrackingMapSize)
-      }
-
-      return [x,y-this.#visualTrackingMapSize];
-    }
-
-    const findBottomRightBoundsOfSolidSection = (x, y, counter) => {
-      if ( counter < 5 && false === isSectionSolid(x, y) ) {
-        counter++
-        return findBottomRightBoundsOfSolidSection(x+this.#visualTrackingMapSize, y, counter)
-      }
-
-      return [x,y];
-    }
-
     // Look for drop/dip section ahead we need to jump over
     y = this.#playerGroundY;
 
-    if ( isSectionSolid(x, y) ) {
+    if ( this.isSectionSolid(x, y) ) {
       // Look for taller section ahead we need to jump over
-      let xyStart = findTopLeftBoundsOfSolidSection(x, y-this.#visualTrackingMapSize);
-      let xyEnd = findTopRightBoundsOfSolidSection(xyStart[0], xyStart[1], 1);
+      let xyStart = this.findTopLeftBoundsOfSolidSection(x, y-this.#visualTrackingMapSize);
+      let xyEnd = this.findTopRightBoundsOfSolidSection(xyStart[0], xyStart[1], 1);
 
       return [xyStart[0], xyStart[1], xyEnd[0] - x, y - xyEnd[1] + this.#visualTrackingMapSize];
     } else {
 
-      if (  false === isSectionSolid(x, y+this.#visualTrackingMapSize) ) {
-        let xyStart = findBottomLeftBoundsOfSolidSection(x, y);
-        let xyEnd = findBottomRightBoundsOfSolidSection(xyStart[0], xyStart[1], 1);
+      if (  false === this.isSectionSolid(x, y+this.#visualTrackingMapSize) ) {
+        let xyStart = this.findBottomLeftBoundsOfSolidSection(x, y);
+        let xyEnd = this.findBottomRightBoundsOfSolidSection(xyStart[0], xyStart[1], 1);
 
         return [xyStart[0], xyEnd[1]+this.#visualTrackingMapSize, xyEnd[0] - x, this.#visualTrackingMapSize];
         // return [xyStart[0], y+this.#visualTrackingMapSize, xyEnd[0] - x, xyEnd[1]-y];
@@ -221,6 +178,48 @@ class GameImageRecognition {
     return false;
   }
 
+  isSectionSolid(x, y){
+    let section = this.#visualTrackingMap[x + 'x'  +y];
+    if ( this.#colors.block == section ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  findTopLeftBoundsOfSolidSection(x, y) {
+    if ( this.isSectionSolid(x, y) ) {
+      return this.findTopLeftBoundsOfSolidSection(x, y-this.#visualTrackingMapSize)
+    }
+
+    return [x,y+this.#visualTrackingMapSize];
+  }
+
+  findTopRightBoundsOfSolidSection(x, y, counter) {
+    if ( counter < 5 && this.isSectionSolid(x, y) ) {
+      counter++
+      return this.findTopRightBoundsOfSolidSection(x+this.#visualTrackingMapSize, y, counter)
+    }
+
+    return [x,y];
+  }
+
+  findBottomLeftBoundsOfSolidSection(x, y) {
+    if ( false === this.isSectionSolid(x, y) && y < this.#visualTrackingCanvas.height) {
+      return this.findBottomLeftBoundsOfSolidSection(x, y+this.#visualTrackingMapSize)
+    }
+
+    return [x,y-this.#visualTrackingMapSize];
+  }
+
+  findBottomRightBoundsOfSolidSection(x, y, counter) {
+    if ( counter < 5 && false === this.isSectionSolid(x, y) ) {
+      counter++
+      return this.findBottomRightBoundsOfSolidSection(x+this.#visualTrackingMapSize, y, counter)
+    }
+
+    return [x,y];
+  }
 
   drawRectOnCanvas(rect, color) {
     let context = this.#visualTrackingCanvas.getContext('2d');
